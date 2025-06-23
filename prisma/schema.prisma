@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGO_URL")
+}
+
+model User {
+  id                 String    @id @default(uuid())  @map("_id")  
+  name               String    
+  email              String    @unique
+  password           String
+  isVerified         Boolean @default(false)
+  location           String? 
+  bio                String?
+}
+
