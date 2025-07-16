@@ -4,8 +4,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("MONGO_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -14,7 +14,25 @@ model User {
   email              String    @unique
   password           String
   isVerified         Boolean @default(false)
+  verificationToken  String?  
   location           String? 
   bio                String?
+
+  product           Product[]  
 }
 
+
+model Product {
+  id                 String  @id @default(uuid())  @map("_id")
+  name               String
+  description        String
+  category           String
+  price              Float 
+  images             String[]  // array of image URLs from cloudinary
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relationship to the user table: each product belongs to a user 
+  userId            String 
+  user              User    @relation(fields: [userId], references: [id]) //defines..
+}
